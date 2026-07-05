@@ -32,13 +32,6 @@ The repository is **open to forks** and can be freely used for learning, testing
 - PostgreSQL
 - psycopg2
 
-### DevOps
-
-- Docker
-- Docker Compose
-- Git
-- GitHub
-- GitHub Actions *(if used)*
 
 ---
 
