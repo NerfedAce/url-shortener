@@ -46,8 +46,8 @@ pipeline {
                 sh '''
                     echo "===== Backend logs ====="
                     docker logs Backend || true
-                    echo "===== Curl backend docs ====="
-                    docker exec Backend curl -f http://localhost:8000/docs
+                    echo "===== Checking backend docs endpoint ====="
+                    docker exec Backend python -c "import urllib.request; print(urllib.request.urlopen('http://localhost:8000/docs').status)"
                 '''
             }
         }
