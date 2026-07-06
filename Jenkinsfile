@@ -18,9 +18,10 @@ pipeline {
         stage('Smoke Test') {
             steps {
                 sh '''
-                    sleep 30
-                    curl -f http://localhost:8000/docs || exit 1
-                '''
+                    docker ps
+                    docker logs Backend
+                    docker exec Backend curl -f http://localhost:8000/docs
+        '''
             }
         }
 
