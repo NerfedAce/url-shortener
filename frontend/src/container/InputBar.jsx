@@ -1,11 +1,13 @@
 import {useState} from "react";
 import "./InputBar.css"
-const Api = import.meta.env.VITE_API_URl;
+const Api = import.meta.env.VITE_API_URL;
 
 function InputBar(){
     const [url , setUrl] = useState("");
     const [shorturl, setShorturl] = useState("No Update");
     const [state, setState] = useState(null)
+    console.log(import.meta.env);
+    console.log(import.meta.env.VITE_API_URL);
     const generateUrl = async () => {
         const response = await fetch(`${Api}/api/short_url`) // change url
         const data = await response.json();
