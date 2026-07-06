@@ -6,16 +6,11 @@ services:
     container_name: Backend
     ports:
       - "8000:8000"
-    volumes:
-      - ./backend:/app
 
   frontend:
     build: ./frontend
     container_name: Frontend
     ports:
       - "5173:5173"
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
     depends_on:
       - backend
