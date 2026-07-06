@@ -14,6 +14,15 @@ pipeline {
                 sh 'docker compose up --build -d'
             }
         }
+        stage('Debug Workspace') {
+            steps {
+                sh '''
+                    pwd
+                    ls -R
+                    ls backend
+                '''
+            }
+}
 
         stage('Smoke Test') {
             steps {
