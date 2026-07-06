@@ -2,65 +2,41 @@ pipeline {
     agent any
 
     stages {
-
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
 
-        stage('Debug Workspace') {
+        stage('Install Backend Deps') {
             steps {
-                sh '''
-                echo "===== Workspace ====="
-                pwd
-                ls -R
-
-                echo "===== Backend ====="
-                ls -l backend
-
-                echo "===== Dockerfile ====="
-                cat backend/Dockerfile
-
-                echo "===== Requirements ====="
-                cat backend/requirements.txt
-                '''
-            }
-        }
-
-        stage('Build Images') {
-            steps {
-                sh '''
-                docker compose down || true
-                docker compose build --no-cache
-                '''
+                dir('backend') {
+                    sh '''
+                        echo "===== Building backend image ====="
+                        docker build -t backend-test .
+                    '''
+                }
             }
         }
 
         stage('Test Backend Import') {
             steps {
                 sh '''
-                echo "===== Importing Main.py ====="
-
-                docker run --rm url-shortener-ci-cd-backend python - <<'EOF'
-import traceback
-
-try:
-    import Main
-    print("SUCCESS: Main imported successfully")
-except Exception:
-    traceback.print_exc()
-    raise
-EOF
+                    echo "===== Importing Main.py ====="
+                    docker run --rm backend-test python -c "import Main; print('IMPORT OK')"
                 '''
             }
         }
 
-        stage('Start Services') {
+        stage('Compose Up') {
             steps {
                 sh '''
-                docker compose up -d
-                docker ps -a
+                    docker compose down || true
+                    docker compose build --no-cache
+                    docker compose up -d
+                    sleep 5
+                    echo "===== Container status ====="
+                    docker ps -a
                 '''
             }
         }
@@ -68,27 +44,18 @@ EOF
         stage('Smoke Test') {
             steps {
                 sh '''
-                echo "===== Backend Logs ====="
-                docker logs Backend || true
-
-                echo "===== Curl ====="
-                curl -f http://localhost:8000/docs
+                    echo "===== Backend logs ====="
+                    docker logs Backend || true
+                    echo "===== Curl backend docs ====="
+                    curl -f http://localhost:8000/docs
                 '''
-            }
-        }
-
-        stage('Stop Containers') {
-            steps {
-                sh 'docker compose down'
             }
         }
     }
 
     post {
         always {
-            sh '''
-            docker compose down || true
-            '''
+            sh 'docker compose down || true'
         }
     }
 }
