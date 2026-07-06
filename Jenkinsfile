@@ -5,7 +5,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git 'https://github.com/your-repo.git'
+                git 'https://github.com/NerfedAce/url-shortener.git'
             }
         }
 
