@@ -47,7 +47,7 @@ pipeline {
                     echo "===== Backend logs ====="
                     docker logs Backend || true
                     echo "===== Curl backend docs ====="
-                    curl -f http://localhost:8000/docs
+                    docker exec Backend curl -f http://localhost:8000/docs
                 '''
             }
         }
