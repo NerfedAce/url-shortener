@@ -1,4 +1,4 @@
-from secrets import randbits
+import random
 
 import requests
 from fastapi import FastAPI,Request
@@ -14,7 +14,7 @@ app = FastAPI()
 app.add_middleware(CORSMiddleware, allow_origins=["*"],allow_methods=["*"],allow_headers=["*"])
 
 def shorten():
-    bit = randbits(32)
+    bit = random.getrandbits(32)
     temp = bit
     short = ""
     code = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
