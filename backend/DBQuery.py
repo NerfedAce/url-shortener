@@ -12,7 +12,10 @@ port = os.getenv("DB_PORT")
 
 
 def search(short):
-    conn = psycopg2.connect(host=host, user=user, password=password, database=database, port=port)
+    try:
+        conn = psycopg2.connect(host=host, user=user, password=password, database=database, port=port)
+    except psycopg2.OperationalError:
+        return None
     curr = conn.cursor()
     curr.execute(
         "SELECT * FROM urls WHERE short_url = %s;",
